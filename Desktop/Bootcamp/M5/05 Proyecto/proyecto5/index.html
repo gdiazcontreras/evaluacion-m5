@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow - Gestor de Tareas</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <main class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+    <header class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-indigo-600 mb-2">TaskFlow</h1>
+      <p class="text-gray-500">Gestión inteligente de tus tareas</p>
+    </header>
+
+    <!-- Formulario -->
+    <section class="mb-8 space-y-4">
+      <form id="task-form" class="flex flex-col md:flex-row gap-4">
+        <input type="text" id="task-desc" placeholder="¿Qué necesitas hacer?" required>
+        <input type="datetime-local" id="task-deadline">
+        <button type="submit" id="btn-submit">
+          <span>Agregar Tarea</span>
+          <svg id="submit-spinner" class="hidden animate-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Búsqueda -->
+      <input type="text" id="task-search" placeholder="Buscar tareas...">
+
+      <!-- Filtros -->
+      <div>
+        <button class="filter-btn active" data-filter="todas">Todas</button>
+        <button class="filter-btn" data-filter="pendientes">Pendientes</button>
+        <button class="filter-btn" data-filter="completadas">Completadas</button>
+      </div>
+    </section>
+
+    <!-- Lista -->
+    <section>
+      <ul id="task-list"></ul>
+      <div id="empty-state" class="hidden">No hay tareas que mostrar.</div>
+      <div id="api-loading" class="hidden">Cargando tareas de ejemplo...</div>
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+
+  <script src="./js/app.js" defer></script>
+</body>
+</html>
