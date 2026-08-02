@@ -180,3 +180,15 @@ const iniciarCuentaRegresiva = (id, fechaLimiteStr) => {
   const intervalId = setInterval(updateTimer, 60000);
   temporizadores.set(id, intervalId);
 };
+
+// ==========================
+// TOASTS
+// ==========================
+const mostrarToast = (mensaje, tipo = 'success') => {
+  const toast = document.createElement('div');
+  toast.className = `toast ${tipo}`;
+  toast.textContent = mensaje;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 2000);
+};
