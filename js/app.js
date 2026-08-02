@@ -100,3 +100,53 @@ const searchInput = document.getElementById('task-search');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const toastContainer = document.getElementById('toast-container');
 const apiLoading = document.getElementById('api-loading');
+
+// ==========================
+// RENDERIZADO Y DOM
+// ==========================
+const renderizarTareas = () => {
+  listaDOM.innerHTML = "";
+  temporizadores.forEach(interval => clearInterval(interval));
+  temporizadores.clear();
+
+  const tareasAMostrar = gestor.obtenerTareasFiltradas();
+
+  if (tareasAMostrar.length === 0) {
+    emptyState.classList.remove('hidden');
+  } else {
+    emptyState.classList.add('hidden');
+
+    tareasAMostrar.forEach(tarea => {
+      const li = document.createElement('li');
+      const estaCompletada = tarea.isCompletada();
+
+      const textClass = estaCompletada ? 'line-through text-gray-400' : 'text-gray-800 font-medium';
+      const bgClass = estaCompletada ? 'bg-gray-50' : 'bg-white border-l-4 border-indigo-500';
+
+      let deadlineHtml = "";
+      if (tarea.fechaLimite && !estaCompletada) {
+        deadlineHtml = `<div id="timer-${tarea.id}" class="text-xs text-orange-500 mt-1">
+                          <span class="countdown-text">Calculando...</span>
+                        </div>`;
+      }
+
+      li.className = `task-item flex items-center justify-between p-4 rounded-lg border ${bgClass}`;
+      li.innerHTML = `
+        <div class="flex items-center gap-3 flex-1">
+          <button class="toggle-btn" data-id="${tarea.id}">${estaCompletada ? '✔️' : ''}</button>
+          <div>
+            <span class="${textClass}">${tarea.descripcion}</span>
+            ${deadlineHtml}
+          </div>
+        </div>
+        <button class="delete-btn" data-id="${tarea.id}">🗑️</button>
+      `;
+
+      listaDOM.appendChild(li);
+
+      if (tarea.fechaLimite && !estaCompletada) {
+        iniciarCuentaRegresiva(tarea.id, tarea.fechaLimite);
+      }
+    });
+  }
+};
