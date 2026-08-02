@@ -1,0 +1,37 @@
+/* ==========================
+   ANIMACIONES PARA TOASTS
+========================== */
+.toast-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.toast-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.toast-leave-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+/* ==========================
+   EFECTOS EXTRA
+========================== */
+
+/* Hover suave en botones de filtro */
+.filter-btn {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Animación sutil en items de tarea */
+.task-item {
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.task-item:hover {
+  transform: scale(1.01);
+}

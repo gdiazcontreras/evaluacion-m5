@@ -1,53 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskFlow - Gestor de Tareas</title>
-  <link rel="stylesheet" href="./css/styles.css">
-</head>
-<body>
-  <main class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
-    <header class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-indigo-600 mb-2">TaskFlow</h1>
-      <p class="text-gray-500">Gestión inteligente de tus tareas</p>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskFlow - Gestor de Tareas</title>
+    <!-- Tailwind vía CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="./css/styles.css"/>
+  </head>
+  <body class="bg-gray-50">
+    <main class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+      <!-- Encabezado -->
+      <header class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-indigo-600 mb-2">TaskFlow</h1>
+        <p class="text-gray-500">Gestión inteligente de tus tareas</p>
+      </header>
 
-    <!-- Formulario -->
-    <section class="mb-8 space-y-4">
-      <form id="task-form" class="flex flex-col md:flex-row gap-4">
-        <input type="text" id="task-desc" placeholder="¿Qué necesitas hacer?" required>
-        <input type="datetime-local" id="task-deadline">
-        <button type="submit" id="btn-submit">
-          <span>Agregar Tarea</span>
-          <svg id="submit-spinner" class="hidden animate-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <!-- Formulario y búsqueda -->
+      <section class="mb-8 space-y-4">
+        <form id="task-form" class="flex flex-col md:flex-row gap-4">
+          <input
+            type="text"
+            id="task-desc"
+            placeholder="¿Qué necesitas hacer?"
+            required
+            class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <input
+            type="datetime-local"
+            id="task-deadline"
+            class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button
+            type="submit"
+            id="btn-submit"
+            class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium flex items-center justify-center disabled:opacity-50"
+          >
+            <span>Agregar Tarea</span>
+            <!-- Spinner -->
+            <svg
+              id="submit-spinner"
+              class="animate-spin ml-2 h-5 w-5 text-white hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042
+              1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Búsqueda -->
+        <div class="relative">
+          <input
+            type="text"
+            id="task-search"
+            placeholder="Buscar tareas..."
+            class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-gray-50"
+          />
+          <svg
+            class="w-5 h-5 text-gray-400 absolute left-3 top-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
           </svg>
-        </button>
-      </form>
+        </div>
 
-      <!-- Búsqueda -->
-      <input type="text" id="task-search" placeholder="Buscar tareas...">
+        <!-- Filtros -->
+        <div class="flex gap-2 text-sm">
+          <button
+            class="filter-btn active bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium"
+            data-filter="todas"
+          >
+            Todas
+          </button>
+          <button
+            class="filter-btn text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-full"
+            data-filter="pendientes"
+          >
+            Pendientes
+          </button>
+          <button
+            class="filter-btn text-gray-500 hover:bg-gray-100 px-3 py-1 rounded-full"
+            data-filter="completadas"
+          >
+            Completadas
+          </button>
+        </div>
+      </section>
 
-      <!-- Filtros -->
-      <div>
-        <button class="filter-btn active" data-filter="todas">Todas</button>
-        <button class="filter-btn" data-filter="pendientes">Pendientes</button>
-        <button class="filter-btn" data-filter="completadas">Completadas</button>
-      </div>
-    </section>
+      <!-- Lista -->
+      <section>
+        <ul id="task-list" class="space-y-3"></ul>
+        <div id="empty-state" class="text-center py-8 text-gray-400 hidden">
+          <p>No hay tareas que mostrar.</p>
+        </div>
+        <div
+          id="api-loading"
+          class="text-center py-4 text-indigo-500 hidden flex items-center justify-center"
+        >
+          <svg
+            class="animate-spin -ml-1 mr-3 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042
+            1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Cargando tareas de ejemplo...
+        </div>
+      </section>
+    </main>
 
-    <!-- Lista -->
-    <section>
-      <ul id="task-list"></ul>
-      <div id="empty-state" class="hidden">No hay tareas que mostrar.</div>
-      <div id="api-loading" class="hidden">Cargando tareas de ejemplo...</div>
-    </section>
-  </main>
+    <!-- Toast -->
+    <div
+      id="toast-container"
+      class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"
+    ></div>
 
-  <!-- Toast -->
-  <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
-
-  <script src="./js/app.js" defer></script>
-</body>
+    <script src="./js/app.js" defer></script>
+  </body>
 </html>

@@ -264,4 +264,18 @@ const cargarTareasDeEjemplo = async () => {
         const { title, completed } = item;
         const tareaFicticia = new Tarea({
           descripcion: `(API) ${title}`,
-          estado: completed ? 'completada' :
+          estado: completed ? 'completada' : 'pendiente'
+        });
+        gestor.agregarTarea(tareaFicticia);
+      });
+      renderizarTareas();
+    } catch (error) {
+      console.error('Error cargando tareas de ejemplo: ', error);
+    } finally {
+      apiLoading.classList.add('hidden');
+    }
+  }
+};
+
+// Ejecutar render inicial
+renderizarTareas();
