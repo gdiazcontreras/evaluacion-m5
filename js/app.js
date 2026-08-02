@@ -250,3 +250,18 @@ filterBtns.forEach(btn => {
     renderizarTareas();
   });
 });
+
+// ==========================
+// API
+// ==========================
+const cargarTareasDeEjemplo = async () => {
+  if (gestor.obtenerTodasLasTareas().length === 0) {
+    apiLoading.classList.remove('hidden');
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=3');
+      const data = await response.json();
+      data.forEach(item => {
+        const { title, completed } = item;
+        const tareaFicticia = new Tarea({
+          descripcion: `(API) ${title}`,
+          estado: completed ? 'completada' :
