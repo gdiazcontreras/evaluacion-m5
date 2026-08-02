@@ -150,3 +150,33 @@ const renderizarTareas = () => {
     });
   }
 };
+
+// ==========================
+// ASINCRONÍA
+// ==========================
+const iniciarCuentaRegresiva = (id, fechaLimiteStr) => {
+  const updateTimer = () => {
+    const elem = document.getElementById(`timer-${id}`);
+    if (!elem) return;
+    const span = elem.querySelector('.countdown-text');
+    const ahora = new Date().getTime();
+    const limite = new Date(fechaLimiteStr).getTime();
+    const distancia = limite - ahora;
+
+    if (distancia < 0) {
+      span.textContent = "¡Vencida!";
+      clearInterval(intervalId);
+      return;
+    }
+
+    const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+
+    span.textContent = `Falta: ${dias}d ${horas}h ${minutos}m`;
+  };
+
+  updateTimer();
+  const intervalId = setInterval(updateTimer, 60000);
+  temporizadores.set(id, intervalId);
+};
