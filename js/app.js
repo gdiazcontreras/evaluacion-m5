@@ -192,3 +192,61 @@ const mostrarToast = (mensaje, tipo = 'success') => {
 
   setTimeout(() => toast.remove(), 2000);
 };
+
+// ==========================
+// EVENTOS
+// ==========================
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const descripcion = inputDesc.value.trim();
+  const fechaLimite = inputDate.value;
+  if (!descripcion) return;
+
+  btnSubmit.disabled = true;
+  spinnerSubmit.classList.remove('hidden');
+
+  setTimeout(() => {
+    const nuevaTarea = new Tarea({ descripcion, fechaLimite });
+    gestor.agregarTarea(nuevaTarea);
+
+    form.reset();
+    btnSubmit.disabled = false;
+    spinnerSubmit.classList.add('hidden');
+
+    renderizarTareas();
+    mostrarToast('Tarea agregada con éxito');
+  }, 800);
+});
+
+listaDOM.addEventListener('click', e => {
+  const btnToggle = e.target.closest('.toggle-btn');
+  const btnDelete = e.target.closest('.delete-btn');
+
+  if (btnToggle) {
+    const id = btnToggle.dataset.id;
+    gestor.toggleEstadoTarea(id);
+    renderizarTareas();
+    mostrarToast('Tarea completada');
+  }
+
+  if (btnDelete) {
+    const id = btnDelete.dataset.id;
+    gestor.eliminarTarea(id);
+    renderizarTareas();
+    mostrarToast('Tarea eliminada', 'error');
+  }
+});
+
+searchInput.addEventListener('keyup', e => {
+  gestor.terminoBusqueda = e.target.value;
+  renderizarTareas();
+});
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', e => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    gestor.filtroActual = e.target.dataset.filter;
+    renderizarTareas();
+  });
+});
