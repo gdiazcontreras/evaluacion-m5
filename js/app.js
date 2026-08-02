@@ -82,3 +82,21 @@ class GestorTareas {
     }
   }
 }
+
+// ==========================
+// CONSTANTES Y ESTADO
+// ==========================
+const gestor = new GestorTareas();
+const temporizadores = new Map();
+
+const form = document.getElementById('task-form');
+const inputDesc = document.getElementById('task-desc');
+const inputDate = document.getElementById('task-deadline');
+const btnSubmit = document.getElementById('btn-submit');
+const spinnerSubmit = document.getElementById('submit-spinner');
+const listaDOM = document.getElementById('task-list');
+const emptyState = document.getElementById('empty-state');
+const searchInput = document.getElementById('task-search');
+const filterBtns = document.querySelectorAll('.filter-btn');
+const toastContainer = document.getElementById('toast-container');
+const apiLoading = document.getElementById('api-loading');
